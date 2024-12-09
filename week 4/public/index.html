@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <!-- Import Google Icon Font -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Import materialize.css -->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
+    <!-- Let browser know website is optimized for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recipe Manager</title>
+  </head>
+
+  <body>
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo">Recipe Manager</a>
+      </div>
+    </nav>
+
+    <!-- Add Recipe Form -->
+    <div class="container">
+      <h4>Add a Recipe</h4>
+      <form id="recipeForm">
+        <div class="input-field">
+          <input type="text" id="recipeName" required />
+          <label for="recipeName">Recipe Name</label>
+        </div>
+        <div class="input-field">
+          <textarea id="recipeIngredients" class="materialize-textarea" required></textarea>
+          <label for="recipeIngredients">Ingredients</label>
+        </div>
+        <div class="input-field">
+          <textarea id="recipeInstructions" class="materialize-textarea" required></textarea>
+          <label for="recipeInstructions">Instructions</label>
+        </div>
+        <button class="btn waves-effect waves-light" type="submit">Add Recipe</button>
+      </form>
+    </div>
+
+    <!-- Display Recipes -->
+    <div class="container">
+      <h4>All Recipes</h4>
+      <ul id="recipeList" class="collection">
+        <!-- Recipes will be appended here -->
+      </ul>
+    </div>
+
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script>
+      // Fetch and display all recipes
+      const fetchRecipes = async () => {
+        const response = await fetch('/api/recipes');
+        const data = await response.json();
+        const recipeList = document.getElementById('recipeList');
+        recipeList.innerHTML = ''; // Clear the list before updating
+        data.data.forEach(recipe => {
+          const li = document.createElement('li');
+          li.className = 'collection-item';
+          li.innerHTML = `<strong>${recipe.name}</strong><br>Ingredients: ${recipe.ingredients}<br>Instructions: ${recipe.instructions}`;
+          recipeList.appendChild(li);
+        });
+      };
+
+      // Add a new recipe
+      const recipeForm = document.getElementById('recipeForm');
+      recipeForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newRecipe = {
+          name: document.getElementById('recipeName').value,
+          ingredients: document.getElementById('recipeIngredients').value,
+          instructions: document.getElementById('recipeInstructions').value
+        };
+        await fetch('/api/recipe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newRecipe)
+        });
+        recipeForm.reset();
+        fetchRecipes(); // Refresh the list after adding
+      });
+
+      // Initial fetch to display recipes
+      fetchRecipes();
+    </script>
+  </body>
+</html>
