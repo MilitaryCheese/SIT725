@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chat App</title>
+    <link rel="stylesheet" href="css/materialize.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="container">
+    <h4 class="center-align">Chat App</h4>
+    
+    <div class="card">
+        <div class="card-content">
+            <div id="chat-box" class="chat-box"></div>
+        </div>
+    </div>
+    
+    <div class="input-field">
+        <input type="text" id="message" placeholder="Type a message...">
+        <button id="send-btn" class="btn waves-effect waves-light">Send</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="js/socket.js"></script>
+    <script type="module" src="js/chatView.js"></script>
+
+</body>
+</html>
